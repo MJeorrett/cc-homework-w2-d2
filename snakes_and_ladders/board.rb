@@ -1,16 +1,17 @@
+require('pry-byebug')
+
 class Board
 
-  attr_reader(:snakes, :ladders)
+  attr_reader(:accessories)
 
-  def initialize(size, snakes, ladders)
+  def initialize(size, accessories)
     @state = Array.new(size,0)
-    @snakes = snakes
-    @ladders = ladders
-    set_up_positions(snakes, ladders)
+    @accessories = accessories
+    set_up_positions(accessories)
   end
 
-  def set_up_positions(snakes, ladders)
-    for square, target in snakes.merge(ladders)
+  def set_up_positions(accessories)
+    for square, target in accessories
       @state[square] = target - square
     end
   end

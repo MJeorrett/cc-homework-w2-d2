@@ -5,15 +5,13 @@ require_relative '../board'
 
 class TestBoard < Minitest::Test
   def setup
-    snakes = {
+    accessories = {
       81 => 63,
-      57 => 24
-    }
-    ladders = {
+      57 => 24,
       32 => 52,
       77 => 97
     }
-    @board = Board.new(100, snakes, ladders)
+    @board = Board.new(100, accessories)
   end
 
   def test_board_should_have_100_tiles

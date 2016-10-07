@@ -6,15 +6,13 @@ require_relative('../board_viewer')
 class BoardViewerTest < MiniTest::Test
 
   def setup
-    snakes = {
+    accessories = {
       81 => 63,
-      57 => 24
-    }
-    ladders = {
+      57 => 24,
       32 => 52,
       77 => 97
     }
-    @board = Board.new(100, snakes, ladders)
+    @board = Board.new(100, accessories)
     @board_viewer = BoardViewer.new(@board)
   end
 
