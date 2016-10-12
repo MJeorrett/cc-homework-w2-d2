@@ -1,8 +1,11 @@
 require_relative('display_matrix')
+require_relative('string__colorize.rb')
+
+require('pry-byebug')
 
 class BoardViewer
 
-  CELLS = {
+  @@cells = {
     blank: [
       "+-----+",
       "|     |",
@@ -11,7 +14,7 @@ class BoardViewer
     ],
     snake_forward_top: [
       "+-----+",
-      "|>-0. |",
+      "|>~O  |",
       "|  oOo|",
       "+----oO"
     ],
@@ -29,7 +32,7 @@ class BoardViewer
     ],
     snake_backward_top: [
       "+-----+",
-      "|  ol |",
+      "|  O~<|",
       "|oOo  |",
       "Oo----+"
     ],
@@ -48,18 +51,18 @@ class BoardViewer
     ladder_top: [
       "+-----+",
       "|     |",
-      "| |=| |",
-      "+-|=|-+"
+      "| I=I |",
+      "+-I=I-+"
     ],
     ladder_middle: [
-      "+-|=|-+",
-      "| |=| |",
-      "| |=| |",
-      "+-|=|-+"
+      "+-I=I-+",
+      "| I=I |",
+      "| I=I |",
+      "+-I=I-+"
     ],
     ladder_bottom: [
-      "+-|=|-+",
-      "| |=| |",
+      "+-I=I-+",
+      "| I=I |",
       "|     |",
       "+-----+"
     ]
@@ -69,7 +72,7 @@ class BoardViewer
 
   def initialize(board)
     @width = Math.sqrt(board.number_of_tiles).floor
-    @display_matrix = DisplayMatrix.new(CELLS[:blank], @width, @width)
+    @display_matrix = DisplayMatrix.new(@@cells[:blank], @width, @width)
 
     for accesory_start_index, accessory_end_index in board.accessories
 
@@ -78,23 +81,23 @@ class BoardViewer
 
       # backward snake
       if (accessory_end[:column]) < (accessory_start[:column])
-        top_cell = CELLS[:snake_backward_top]
-        middle_cell = CELLS[:snake_backward_middle]
-        bottom_cell = CELLS[:snake_backward_bottom]
+        top_cell = @@cells[:snake_backward_top]
+        middle_cell = @@cells[:snake_backward_middle]
+        bottom_cell = @@cells[:snake_backward_bottom]
         row_offset = 1
         column_offset = -1
       # forward snake
       elsif (accessory_end[:column]) > (accessory_start[:column])
-        top_cell = CELLS[:snake_forward_top]
-        middle_cell = CELLS[:snake_forward_middle]
-        bottom_cell = CELLS[:snake_forward_bottom]
+        top_cell = @@cells[:snake_forward_top]
+        middle_cell = @@cells[:snake_forward_middle]
+        bottom_cell = @@cells[:snake_forward_bottom]
         row_offset = 1
         column_offset = 1
       # ladder
       else
-        bottom_cell = CELLS[:ladder_top]
-        middle_cell = CELLS[:ladder_middle]
-        top_cell = CELLS[:ladder_bottom]
+        bottom_cell = @@cells[:ladder_top]
+        middle_cell = @@cells[:ladder_middle]
+        top_cell = @@cells[:ladder_bottom]
         row_offset = -1
         column_offset = 0
       end
@@ -121,7 +124,11 @@ class BoardViewer
   end
 
   def get_display_string()
-    return @display_matrix.get_display_string
+    str = @display_matrix.get_display_string
+    str.colourise_chars(['o', 'O'], 32, 49, true)
+    str.colourise_chars(['>', '~', '<'], 31, 49, true)
+    str.colourise_chars(['=', 'I', 'I'], 33, 49, true)
+    return str
   end
 
 end
